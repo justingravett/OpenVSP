@@ -100,7 +100,7 @@ VSPAEROMgrSingleton::VSPAEROMgrSingleton() : ParmContainer()
     m_NCPU.SetDescript( "Number of processors to use" );
 
     //    wake parameters
-    m_WakeNumIter.Init( "WakeNumIter", groupname, this, 5, 3, 255 );
+    m_WakeNumIter.Init( "WakeNumIter", groupname, this, 5, 0, 255 );
     m_WakeNumIter.SetDescript( "Number of wake iterations to execute, Default = 5" );
     m_WakeAvgStartIter.Init( "WakeAvgStartIter", groupname, this, 0, 0, 255 );
     m_WakeAvgStartIter.SetDescript( "Iteration at which to START averaging the wake. Default=0 --> No wake averaging" );
@@ -224,6 +224,18 @@ void VSPAEROMgrSingleton::ParmChanged( Parm* parm_ptr, int type )
     if ( veh )
     {
         veh->ParmChanged( parm_ptr, type );
+    }
+    if ( &m_WakeNumIter == parm_ptr )
+    {
+        // Don't allow 1 or 2 wake iterations (must be 0 or >= 3)
+        if ( (int)parm_ptr->Get() == 1 )
+        {
+            parm_ptr->Set( 0 );
+        }
+        else if ( (int)parm_ptr->Get() == 2 )
+        {
+            parm_ptr->Set( 3 );
+        }
     }
 }
 
