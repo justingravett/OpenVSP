@@ -317,6 +317,7 @@ public:
     void UpdateControlSurfaceGroupSuffix();
 
     // Unsteady Group Functions
+    int CreateGroupsFile();
     void SetCurrentUnsteadyGroupIndex( int index );
     int GetCurrentUnsteadyGroupIndex()                          { return m_CurrentUnsteadyGroupIndex; }
     UnsteadyGroup* AddUnsteadyGroup();
