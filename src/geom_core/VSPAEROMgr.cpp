@@ -1456,8 +1456,12 @@ string VSPAEROMgrSingleton::ComputeSolverSingle( FILE * logFile )
         string stabFileName = m_StabFile;
         string modelNameBase = m_ModelNameBase;
 
+        bool unsteady_flag = m_RotateBladesFlag.Get();
         vsp::VSPAERO_ANALYSIS_METHOD analysisMethod = ( vsp::VSPAERO_ANALYSIS_METHOD )m_AnalysisMethod.Get();
         vsp::VSPAERO_STABILITY_TYPE stabilityType = ( vsp::VSPAERO_STABILITY_TYPE )m_StabilityType.Get();
+        bool noise_flag = m_NoiseCalcFlag.Get();
+        int noise_type = m_NoiseCalcType.Get();
+        int noise_unit = m_NoiseUnits.Get();
 
         // Save analysis type for Cp Slicer
         m_CpSliceAnalysisType = analysisMethod;
@@ -1669,6 +1673,15 @@ string VSPAEROMgrSingleton::ComputeSolverSingle( FILE * logFile )
                         ComputeCpSlices();
                     }
 
+                    if ( unsteady_flag )
+                    {
+
+                        if ( noise_flag )
+                        {
+                            ExecuteNoiseAnalysis( logFile, noise_type, noise_unit );
+                        }
+                    }
+
                     // Send the message to update the screens
                     MessageData data;
                     data.m_String = "UpdateAllScreens";
@@ -1712,8 +1725,14 @@ string VSPAEROMgrSingleton::ComputeSolverBatch( FILE * logFile )
         string stabFileName = m_StabFile;
         string modelNameBase = m_ModelNameBase;
 
+
+        bool unsteady_flag = m_RotateBladesFlag.Get();
         vsp::VSPAERO_ANALYSIS_METHOD analysisMethod = ( vsp::VSPAERO_ANALYSIS_METHOD )m_AnalysisMethod.Get();
         vsp::VSPAERO_STABILITY_TYPE stabilityType = ( vsp::VSPAERO_STABILITY_TYPE )m_StabilityType.Get();
+        bool noise_flag = m_NoiseCalcFlag.Get();
+        int noise_type = m_NoiseCalcType.Get();
+        int noise_unit = m_NoiseUnits.Get();
+
         // Save analysis type for Cp Slicer
         m_CpSliceAnalysisType = analysisMethod;
 
@@ -1925,6 +1944,15 @@ string VSPAEROMgrSingleton::ComputeSolverBatch( FILE * logFile )
         if ( m_CpSliceFlag() && m_CpSliceVec.size() > 0 )
         {
             ComputeCpSlices();
+        }
+
+        if ( unsteady_flag )
+        {
+
+            if ( noise_flag )
+            {
+                ExecuteNoiseAnalysis( logFile, noise_type, noise_unit );
+            }
         }
 
         // Send the message to update the screens
@@ -4055,6 +4083,98 @@ int VSPAEROMgrSingleton::CreateGroupsFile()
     return WaitForFile( m_GroupsFile );
 }
 
+string VSPAEROMgrSingleton::ExecuteNoiseAnalysis( FILE* logFile, int noise_type, int noise_unit )
+{
+    Vehicle* veh = VehicleMgr.GetVehicle();
+    if ( !veh )
+    {
+        return string();
+    }
+
+    WaitForFile( m_AdbFile );
+    if ( !FileExist( m_AdbFile ) )
+    {
+        fprintf( stderr, "WARNING: Aerothermal database file not found: %s\n\tFile: %s \tLine:%d\n", m_AdbFile.c_str(), __FILE__, __LINE__ );
+        return string();
+    }
+
+    for ( size_t i = 0; i < m_GroupResFiles.size(); i++ )
+    {
+        WaitForFile( m_GroupResFiles[i] );
+        if ( !FileExist( m_GroupResFiles[i] ) )
+        {
+            fprintf( stderr, "WARNING: Group result file not found: %s\n\tFile: %s \tLine:%d\n", m_GroupResFiles[i].c_str(), __FILE__, __LINE__ );
+            return string();
+        }
+    }
+
+    for ( size_t i = 0; i < m_RotorResFiles.size(); i++ )
+    {
+        WaitForFile( m_RotorResFiles[i] );
+        if ( !FileExist( m_RotorResFiles[i] ) )
+        {
+            fprintf( stderr, "WARNING: Rotor result file not found: %s\n\tFile: %s \tLine:%d\n", m_RotorResFiles[i].c_str(), __FILE__, __LINE__ );
+            return string();
+        }
+    }
+
+    //====== Send command to be executed by the system at the command prompt ======//
+    vector<string> args;
+
+    args.push_back( "-noise" );
+
+    if ( noise_type == vsp::NOISE_FLYBY )
+    {
+        args.push_back( "-flyby" );
+    }
+    else if ( noise_type == vsp::NOISE_FOOTPRINT )
+    {
+        args.push_back( "-footprint" );
+    }
+    else if ( noise_type == vsp::NOISE_STEADY )
+    {
+        args.push_back( "-steady" );
+    }
+
+    if ( noise_unit == vsp::NOISE_ENGLISH )
+    {
+        args.push_back( "-english" );
+    }
+
+    // Add model file name
+    args.push_back( m_ModelNameBase );
+
+    //Print out execute command
+    string cmdStr = m_SolverProcess.PrettyCmd( veh->GetExePath(), veh->GetVSPAEROCmd(), args );
+    if ( logFile )
+    {
+        fprintf( logFile, "%s", cmdStr.c_str() );
+    }
+    else
+    {
+        MessageData data;
+        data.m_String = "VSPAEROSolverMessage";
+        data.m_StringVec.push_back( cmdStr );
+        MessageMgr::getInstance().Send( "ScreenMgr", NULL, data );
+    }
+
+    // Execute VSPAero
+    m_SolverProcess.ForkCmd( veh->GetExePath(), veh->GetVSPAEROCmd(), args );
+
+    // ==== MonitorSolverProcess ==== //
+    MonitorSolver( logFile );
+
+    // Check if the kill solver flag has been raised, if so clean up and return
+    //  note: we could have exited the IsRunning loop if the process was killed
+    if ( m_SolverProcessKill )
+    {
+        m_SolverProcessKill = false;    //reset kill flag
+
+        return string();    //return empty result ID vector
+    }
+
+    return string(); // TODO: Read noise results
+}
 /*##############################################################################
 #                                                                              #
 #                               CpSlice                                        #
