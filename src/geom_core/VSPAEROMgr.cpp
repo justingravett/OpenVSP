@@ -1326,6 +1326,9 @@ string VSPAEROMgrSingleton::ComputeSolverSingle( FILE * logFile )
         vsp::VSPAERO_ANALYSIS_METHOD analysisMethod = ( vsp::VSPAERO_ANALYSIS_METHOD )m_AnalysisMethod.Get();
         vsp::VSPAERO_STABILITY_TYPE stabilityType = ( vsp::VSPAERO_STABILITY_TYPE )m_StabilityType.Get();
 
+        // Save analysis type for Cp Slicer
+        m_CpSliceAnalysisType = analysisMethod;
+
         int ncpu = m_NCPU.Get();
 
         int wakeAvgStartIter = m_WakeAvgStartIter.Get();
@@ -1560,6 +1563,8 @@ string VSPAEROMgrSingleton::ComputeSolverBatch( FILE * logFile )
         bool stabilityFlag = m_StabilityCalcFlag.Get();
         vsp::VSPAERO_ANALYSIS_METHOD analysisMethod = ( vsp::VSPAERO_ANALYSIS_METHOD )m_AnalysisMethod.Get();
         vsp::VSPAERO_STABILITY_TYPE stabilityType = ( vsp::VSPAERO_STABILITY_TYPE )m_StabilityType.Get();
+        // Save analysis type for Cp Slicer
+        m_CpSliceAnalysisType = analysisMethod;
 
         int ncpu = m_NCPU.Get();
 
@@ -2942,9 +2947,6 @@ void VSPAEROMgrSingleton::UpdateHighlighted( vector < DrawObj* > & draw_obj_vec 
 string VSPAEROMgrSingleton::ComputeCpSlices( FILE * logFile )
 {
     string resID = string();
-
-    // Save analysis type for Cp Slicer
-    m_CpSliceAnalysisType = m_AnalysisMethod.Get();
 
     CreateCutsFile();
 
