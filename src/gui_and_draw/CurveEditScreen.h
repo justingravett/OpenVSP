@@ -84,6 +84,7 @@ private:
     StringOutput m_CurveType;
 
     ToggleButton m_PreserveXSecARToggle;
+    ToggleButton m_FlipXSecToggle;
     ToggleButton m_AbsDimToggle;
 
     // Draw Tab GUI Elements

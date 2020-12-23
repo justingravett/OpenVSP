@@ -524,6 +524,7 @@ public:
     Parm m_SplitU;
     BoolParm m_AbsoluteFlag;
     BoolParm m_PreserveARFlag;
+    BoolParm m_DrawFlippedXSecFlag;
 
     // Parms for XSec background image in GUI
     Parm m_XSecPointSize;

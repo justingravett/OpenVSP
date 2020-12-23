@@ -2260,6 +2260,11 @@ int EditXSecWindow::handle( int fl_event )
     double sx = coord.x();
     double sy = coord.y();
 
+    if ( edit_curve_xs->m_DrawFlippedXSecFlag.Get() )
+    {
+        sx *= -1;
+    }
+
     if ( fl_event == FL_PUSH && !Fl::event_button2() )
     {
         // Diameter of point + 10% considered "hit" 
@@ -2412,6 +2417,10 @@ int EditXSecWindow::ihit( int mx, int my, double r_test )
     for ( size_t i = 0; i < ndata; i++ )
     {
         xdata[i] = control_pts[i].x();
+        if ( edit_curve_xs->m_DrawFlippedXSecFlag.Get() )
+        {
+            xdata[i] *= -1;
+        }
         ydata[i] = control_pts[i].y();
     }
 

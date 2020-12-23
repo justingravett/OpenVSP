@@ -2405,6 +2405,9 @@ EditCurveXSec::EditCurveXSec() : XSecCurve()
     m_XSecPointSize.Init( "XSecPointSize", ( m_GroupName + "_Background" ), NULL, 8.0, 1e-4, 1e4 );
     m_XSecLineThickness.Init( "XSecLineThickness", ( m_GroupName + "_Background" ), NULL, 1.5, 1e-4, 1e4 );
 
+    m_DrawFlippedXSecFlag.Init( "DrawFlippedXSecFlag", m_GroupName, this, false, false, true );
+    m_DrawFlippedXSecFlag.SetDescript( "Flag to draw the X location of the control points on the opposite side of the Y axis" );
+
     m_SelectPntID = 0;
     m_EnforceG1Next = true;
 
