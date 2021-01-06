@@ -279,10 +279,10 @@ BORScreen::BORScreen( ScreenMgr* mgr ) : GeomScreen( mgr, 300, 680, "BOR" )
     m_WedgeGroup.AddYGap();
     m_WedgeGroup.AddSlider( m_WedgeZCamberSlider, "Camber", 1, "%7.5f" );
     m_WedgeGroup.AddYGap();
-    m_WedgeGroup.AddSlider( m_WedgeUForeUpSlider, "U Fwd Up", 1, "%7.5f" );
-    m_WedgeGroup.AddSlider( m_WedgeUForeLowSlider, "U Fwd Low", 1, "%7.5f" );
-    m_WedgeGroup.AddSlider( m_WedgeDuUpSlider, "dU Flat Up", 1, "%7.5f" );
-    m_WedgeGroup.AddSlider( m_WedgeDuLowSlider, "dU Flat Low", 1, "%7.5f" );
+    m_WedgeGroup.AddSlider( m_WedgeWForeUpSlider, "W Fwd Up", 1, "%7.5f" );
+    m_WedgeGroup.AddSlider( m_WedgeWForeLowSlider, "W Fwd Low", 1, "%7.5f" );
+    m_WedgeGroup.AddSlider( m_WedgeDwUpSlider, "dW Flat Up", 1, "%7.5f" );
+    m_WedgeGroup.AddSlider( m_WedgeDwLowSlider, "dW Flat Low", 1, "%7.5f" );
 
     //==== Fuse File ====//
     m_XSecLayout.AddSubGroupLayout( m_FuseFileGroup, m_XSecLayout.GetW(), m_XSecLayout.GetRemainY() );
@@ -892,10 +892,10 @@ bool BORScreen::Update()
             m_WedgeThickLocLowSlider.Update( we_xs->m_ThickLocLow.GetID() );
             m_WedgeFlatUpSlider.Update( we_xs->m_FlatUp.GetID() );
             m_WedgeFlatLowSlider.Update( we_xs->m_FlatLow.GetID() );
-            m_WedgeUForeUpSlider.Update( we_xs->m_UForeUp.GetID() );
-            m_WedgeUForeLowSlider.Update( we_xs->m_UForeLow.GetID() );
-            m_WedgeDuUpSlider.Update( we_xs->m_DuUp.GetID() );
-            m_WedgeDuLowSlider.Update( we_xs->m_DuLow.GetID() );
+            m_WedgeWForeUpSlider.Update( we_xs->m_WForeUp.GetID() );
+            m_WedgeWForeLowSlider.Update( we_xs->m_WForeLow.GetID() );
+            m_WedgeDwUpSlider.Update( we_xs->m_DwUp.GetID() );
+            m_WedgeDwLowSlider.Update( we_xs->m_DwLow.GetID() );
 
             if ( we_xs->m_SymmThick() )
             {

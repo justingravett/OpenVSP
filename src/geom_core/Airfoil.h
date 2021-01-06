@@ -320,10 +320,10 @@ public:
     Parm m_FlatLow;
     Parm m_ZCamber;
 
-    Parm m_UForeUp;
-    Parm m_DuUp;
-    Parm m_UForeLow;
-    Parm m_DuLow;
+    Parm m_WForeUp;
+    Parm m_DwUp;
+    Parm m_WForeLow;
+    Parm m_DwLow;
 
     BoolParm m_SymmThick;
 

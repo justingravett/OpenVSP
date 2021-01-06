@@ -168,10 +168,10 @@ protected:
     SliderAdjRangeInput m_WedgeThickLocLowSlider;
     SliderAdjRangeInput m_WedgeFlatUpSlider;
     SliderAdjRangeInput m_WedgeFlatLowSlider;
-    SliderAdjRangeInput m_WedgeUForeUpSlider;
-    SliderAdjRangeInput m_WedgeUForeLowSlider;
-    SliderAdjRangeInput m_WedgeDuUpSlider;
-    SliderAdjRangeInput m_WedgeDuLowSlider;
+    SliderAdjRangeInput m_WedgeWForeUpSlider;
+    SliderAdjRangeInput m_WedgeWForeLowSlider;
+    SliderAdjRangeInput m_WedgeDwUpSlider;
+    SliderAdjRangeInput m_WedgeDwLowSlider;
 
     GroupLayout m_FuseFileGroup;
     TriggerButton m_ReadFuseFileButton;

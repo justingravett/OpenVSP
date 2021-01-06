@@ -895,15 +895,15 @@ Wedge::Wedge( ) : Airfoil( )
     m_ZCamber.Init( "ZCamber", m_GroupName, this, 0.0, 0.0, 1.0 );
     m_ZCamber.SetDescript( "Z/C height of camber curve." );
 
-    m_UForeUp.Init( "UForeUp", m_GroupName, this, 0.75, 0.5, 1.0 );
-    m_UForeUp.SetDescript( "U location of forward upper surface corner." );
-    m_UForeLow.Init( "UForeLow", m_GroupName, this, 0.25, 0.0, 0.5 );
-    m_UForeLow.SetDescript( "U location of forward lower surface corner." );
+    m_WForeUp.Init( "UForeUp", m_GroupName, this, 0.75, 0.5, 1.0 );
+    m_WForeUp.SetDescript( "W location of forward upper surface corner (Should be WForeUp)." );
+    m_WForeLow.Init( "UForeLow", m_GroupName, this, 0.25, 0.0, 0.5 );
+    m_WForeLow.SetDescript( "W location of forward lower surface corner (Should be WForeLow)." );
 
-    m_DuUp.Init( "DuUp", m_GroupName, this, 0.1, 0.001, 0.5 );
-    m_DuUp.SetDescript( "U extent of upper surface flat." );
-    m_DuLow.Init( "DuLow", m_GroupName, this, 0.1, 0.001, 0.5 );
-    m_DuLow.SetDescript( "U extent of lower surface flat." );
+    m_DwUp.Init( "DuUp", m_GroupName, this, 0.1, 0.001, 0.5 );
+    m_DwUp.SetDescript( "W extent of upper surface flat (Should be DwUp)." );
+    m_DwLow.Init( "DuLow", m_GroupName, this, 0.1, 0.001, 0.5 );
+    m_DwLow.SetDescript( "W extent of lower surface flat (Should be DwLow)." );
 
     m_SymmThick.Init( "SymmThick", m_GroupName, this, true, 0, 1 );
     m_SymmThick.SetDescript( "Flag to set symmetrical thickness distribution parameters." );
@@ -921,8 +921,8 @@ void Wedge::Update()
     m_FlatUp.SetUpperLimit( 1.0 - m_ThickLoc() );
     m_FlatLow.SetUpperLimit( 1.0 - m_ThickLocLow() );
 
-    m_DuUp.SetUpperLimit( 1.0 - m_UForeUp() );
-    m_DuLow.SetUpperLimit( 0.5 - m_UForeLow() );
+    m_DwUp.SetUpperLimit( 1.0 - m_WForeUp() );
+    m_DwLow.SetUpperLimit( 0.5 - m_WForeLow() );
 
     double halfthick = m_ThickChord() / 2.0;
 
@@ -943,7 +943,7 @@ void Wedge::Update()
     }
 
     vector<vec3d> pt( npt );
-    vector<double> u( npt + 1 );
+    vector<double> w( npt + 1 );
 
     // Position the points
     int ipt = 0;
@@ -962,22 +962,22 @@ void Wedge::Update()
 
     // Assign the U parameters
     ipt = 0;
-    u[ipt] = 0; ipt++;
+    w[ipt] = 0; ipt++;
     if ( flatlow )
     {
-        u[ipt] = ( m_UForeLow() - m_DuLow() ) * 4.0; ipt++;
+        w[ipt] = ( m_WForeLow() - m_DwLow() ) * 4.0; ipt++;
     }
-    u[ipt] = m_UForeLow() * 4.0; ipt++;
-    u[ipt] = 2; ipt++;
-    u[ipt] = m_UForeUp() * 4.0; ipt++;
+    w[ipt] = m_WForeLow() * 4.0; ipt++;
+    w[ipt] = 2; ipt++;
+    w[ipt] = m_WForeUp() * 4.0; ipt++;
     if ( flatup )
     {
-        u[ipt] = ( m_UForeUp() + m_DuUp() ) * 4.0; ipt++;
+        w[ipt] = ( m_WForeUp() + m_DwUp() ) * 4.0; ipt++;
     }
-    u[ipt] = 4; ipt++;
+    w[ipt] = 4; ipt++;
 
     // build the wedge
-    m_Curve.InterpolateLinear( pt, u, true );
+    m_Curve.InterpolateLinear( pt, w, true );
 
     Airfoil::Update();
 }
