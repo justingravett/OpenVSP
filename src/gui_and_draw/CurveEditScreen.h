@@ -91,6 +91,8 @@ private:
     ColorPicker m_ColorPicker;
     SliderAdjRangeInput m_PointSizeSlider;
     SliderAdjRangeInput m_LineThicknessSlider;
+    CheckButton m_PointColorCheck;
+    SliderAdjRangeInput m_PointColorWheelSlider;
 
     ToggleButton m_BorderToggle;
     ToggleButton m_AxisToggle;

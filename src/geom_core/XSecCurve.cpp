@@ -2405,6 +2405,12 @@ EditCurveXSec::EditCurveXSec() : XSecCurve()
     m_XSecPointSize.Init( "XSecPointSize", ( m_GroupName + "_Background" ), NULL, 8.0, 1e-4, 1e4 );
     m_XSecLineThickness.Init( "XSecLineThickness", ( m_GroupName + "_Background" ), NULL, 1.5, 1e-4, 1e4 );
 
+    m_XSecPointColorFlag.Init( "XSecPointColorFlag", ( m_GroupName + "_Background" ), this, false, false, true );
+    m_XSecPointColorFlag.SetDescript( "Flag to color XSec points" );
+
+    m_XSecPointColorWheel.Init( "XSecPointColorWheel", ( m_GroupName + "_Background" ), this, -1, -1, 359 );
+    m_XSecPointColorWheel.SetDescript( "Color wheel index for XS_EDIT_CURVE points" );
+
     m_DrawFlippedXSecFlag.Init( "DrawFlippedXSecFlag", m_GroupName, this, false, false, true );
     m_DrawFlippedXSecFlag.SetDescript( "Flag to draw the X location of the control points on the opposite side of the Y axis" );
 
