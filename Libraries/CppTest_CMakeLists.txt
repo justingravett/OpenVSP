@@ -12,6 +12,8 @@ SET( CPPTEST_INCLUDE_HEADERS
 src/cpptest-assert.h
 src/cpptest-collectoroutput.h
 src/cpptest-compileroutput.h
+src/cpptest-simplecollector.h
+src/cpptest-xmloutput.h
 src/cpptest-htmloutput.h
 src/cpptest-output.h
 src/cpptest-source.h
