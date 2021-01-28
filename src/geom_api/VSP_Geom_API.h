@@ -136,6 +136,7 @@ extern void SetViewAxis( bool vaxis );
 extern void SetShowBorders( bool brdr );
 extern void SetGeomDrawType(const string &geom_id, int type);
 extern void SetGeomDisplayType(const string &geom_id, int type);
+extern void SetWireMeshColor( const string &geom_id, double r, double g, double b );
 extern void SetBackground( double r, double g, double b );
 
 //======================== Geom Functions ================================//
