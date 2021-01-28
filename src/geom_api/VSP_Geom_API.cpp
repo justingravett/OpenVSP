@@ -1620,6 +1620,20 @@ void SetGeomDisplayType(const string &geom_id, int type)
     ErrorMgr.NoError();
 }
 
+void SetWireMeshColor( const string &geom_id, double r, double g, double b )
+{
+    Vehicle* veh = GetVehicle();
+    Geom* geom_ptr = veh->FindGeom( geom_id );
+    if ( !geom_ptr )
+    {
+        ErrorMgr.AddError( VSP_INVALID_PTR, "SetWireMeshColor::Can't Find Geom " + geom_id );
+        return;
+    }
+    geom_ptr->m_GuiDraw.SetWireColor( r, b, g );
+
+    ErrorMgr.NoError();
+}
+
 void SetBackground( double r, double g, double b )
 {
 #ifdef VSP_USE_FLTK

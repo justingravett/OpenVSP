@@ -3902,6 +3902,25 @@ void ScriptMgrSingleton::RegisterAPI( asIScriptEngine* se )
 
     doc_struct.comment = R"(
 /*!
+    Set the color of the wire mesh for a particular Geom.
+    \code{.cpp}
+    string pid = AddGeom( "POD" );                      // Add Pod for testing
+
+    SetWireMeshColor( pid, 255, 165, 0 );       // Change color to orange
+
+    Update();
+    \endcode
+    \sa DISPLAY_TYPE
+    \param [in] geom_id Geom ID
+    \param [in] r Red 8-bit unsigned integer (range: 0-255)
+    \param [in] g Green 8-bit unsigned integer (range: 0-255)
+    \param [in] b Blue 8-bit unsigned integer (range: 0-255)
+*/)";
+    r = se->RegisterGlobalFunction( "void SetWireMeshColor( const string & in geom_id, double r, double g, double b )", asFUNCTION( vsp::SetWireMeshColor ), asCALL_CDECL, doc_struct );
+    assert( r >= 0 );
+
+    doc_struct.comment = R"(
+/*!
     Set the background color
     \code{.cpp}
     SetBackground( 1.0, 1.0, 1.0 );                                 // Set background to bright white
