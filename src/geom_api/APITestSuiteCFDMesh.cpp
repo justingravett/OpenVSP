@@ -169,7 +169,7 @@ void APITestSuiteCFDMesh::RunAnalysis( vector < string > file_1, vector < string
     vsp::PrintAnalysisInputs( analysis_name );
 
     printf("Executing Analysis\n");
-    string resid = vsp::ExecAnalysis( analysis_name );
+    vsp::ExecAnalysis( analysis_name );
 }
 
 void APITestSuiteCFDMesh::RunScaleTest( double scale_value, double test_compare_percent )
@@ -306,7 +306,7 @@ void APITestSuiteCFDMesh::CFDMeshAnalysisTest()
     vsp::PrintAnalysisInputs( analysis_name );
 
     printf( "\tExecuting Analysis\n" );
-    string resid = vsp::ExecAnalysis( analysis_name );
+    vsp::ExecAnalysis( analysis_name );
 
     // Final check for errors
     TEST_ASSERT( !vsp::ErrorMgr.PopErrorAndPrint( stdout ) );    //PopErrorAndPrint returns TRUE if there is an error we want ASSERT to check that this is FALSE
@@ -435,7 +435,7 @@ void APITestSuiteCFDMesh::FEAMeshAnalysisTest()
     vsp::PrintAnalysisInputs( analysis_name );
 
     printf( "\tExecuting Analysis\n" );
-    string resid = vsp::ExecAnalysis( analysis_name );
+    vsp::ExecAnalysis( analysis_name );
 
     // Final check for errors
     TEST_ASSERT( !vsp::ErrorMgr.PopErrorAndPrint( stdout ) );    //PopErrorAndPrint returns TRUE if there is an error we want ASSERT to check that this is FALSE
