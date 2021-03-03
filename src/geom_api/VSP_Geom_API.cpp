@@ -469,7 +469,7 @@ string ComputeCompGeom( int set, bool half_mesh, int file_export_types )
 
     if ( id.size() == 0 )
     {
-        ErrorMgr.AddError( VSP_INVALID_ID, "ComputeMassProps::Invalid ID " );
+        ErrorMgr.AddError( VSP_INVALID_ID, "ComputeCompGeom::Invalid ID " );
     }
     else
     {
@@ -1699,6 +1699,7 @@ string AddGeom( const string & type, const string & parent  )
         if ( veh->GetGeomType( i ).m_Name == type )
         {
             type_index = i;
+            break;
         }
     }
 
@@ -2513,7 +2514,7 @@ void SetFeaMeshStructIndex( int struct_index )
     }
     else
     {
-        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "AddFeaStruct::Index Out of Range" );
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "SetFeaMeshStructIndex::Index Out of Range" );
     }
 }
 
@@ -2961,7 +2962,7 @@ int NumFeaSubSurfs( const string & fea_struct_id )
     FeaStructure* feastruct = StructureMgr.GetFeaStruct( fea_struct_id );
     if ( !feastruct )
     {
-        ErrorMgr.AddError( VSP_INVALID_ID, "NumFeaParts::Invalid FeaStructure ID " + fea_struct_id );
+        ErrorMgr.AddError( VSP_INVALID_ID, "NumFeaSubSurfs::Invalid FeaStructure ID " + fea_struct_id );
         return -1;
     }
 
@@ -4979,13 +4980,13 @@ vector < bool > GetEditXSecFixedUVec( const std::string& xsec_id )
     XSec* xs = FindXSec( xsec_id );
     if ( !xs )
     {
-        ErrorMgr.AddError( VSP_INVALID_PTR, "GetFixedUVec::Can't Find XSec " + xsec_id );
+        ErrorMgr.AddError( VSP_INVALID_PTR, "GetEditXSecFixedUVec::Can't Find XSec " + xsec_id );
         return vector < bool > {};
     }
 
     if ( xs->GetXSecCurve()->GetType() != XS_EDIT_CURVE )
     {
-        ErrorMgr.AddError( VSP_WRONG_XSEC_TYPE, "GetFixedUVec::XSec Not XS_EDIT_CURVE Type" );
+        ErrorMgr.AddError( VSP_WRONG_XSEC_TYPE, "GetEditXSecFixedUVec::XSec Not XS_EDIT_CURVE Type" );
         return vector < bool > {};
     }
 
@@ -5001,13 +5002,13 @@ void SetEditXSecFixedUVec( const std::string& xsec_id, vector < bool > fixed_u_v
     XSec* xs = FindXSec( xsec_id );
     if ( !xs )
     {
-        ErrorMgr.AddError( VSP_INVALID_PTR, "SetFixedUVec::Can't Find XSec " + xsec_id );
+        ErrorMgr.AddError( VSP_INVALID_PTR, "SetEditXSecFixedUVec::Can't Find XSec " + xsec_id );
         return;
     }
 
     if ( xs->GetXSecCurve()->GetType() != XS_EDIT_CURVE )
     {
-        ErrorMgr.AddError( VSP_WRONG_XSEC_TYPE, "SetFixedUVec::XSec Not XS_EDIT_CURVE Type" );
+        ErrorMgr.AddError( VSP_WRONG_XSEC_TYPE, "SetEditXSecFixedUVec::XSec Not XS_EDIT_CURVE Type" );
         return;
     }
 
@@ -5016,7 +5017,7 @@ void SetEditXSecFixedUVec( const std::string& xsec_id, vector < bool > fixed_u_v
 
     if ( edit_xs->GetNumPts() != fixed_u_vec.size() )
     {
-        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "SetFixedUVec:Size of fixed_u_vec Not Equal to Number of Control Points" );
+        ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "SetEditXSecFixedUVec:Size of fixed_u_vec Not Equal to Number of Control Points" );
         return;
     }
 
@@ -5229,7 +5230,7 @@ void RotateSet( int set_index, double x_rot_deg, double y_rot_deg, double z_rot_
     GroupTransformations* group_trans = veh->GetGroupTransformationsPtr();
     if ( !group_trans )
     {
-        ErrorMgr.AddError( VSP_INVALID_PTR, "ScaleSet::Can't Get Group Transformation Pointer" );
+        ErrorMgr.AddError( VSP_INVALID_PTR, "RotateSet::Can't Get Group Transformation Pointer" );
         return;
     }
 
@@ -5254,7 +5255,7 @@ void TranslateSet( int set_index, const vec3d &translation_vec )
     GroupTransformations* group_trans = veh->GetGroupTransformationsPtr();
     if ( !group_trans )
     {
-        ErrorMgr.AddError( VSP_INVALID_PTR, "ScaleSet::Can't Get Group Transformation Pointer" );
+        ErrorMgr.AddError( VSP_INVALID_PTR, "TranslateSet::Can't Get Group Transformation Pointer" );
         return;
     }
 
@@ -5279,7 +5280,7 @@ void TransformSet( int set_index, const vec3d &translation_vec, double x_rot_deg
     GroupTransformations* group_trans = veh->GetGroupTransformationsPtr();
     if ( !group_trans )
     {
-        ErrorMgr.AddError( VSP_INVALID_PTR, "ScaleSet::Can't Get Group Transformation Pointer" );
+        ErrorMgr.AddError( VSP_INVALID_PTR, "TransformSet::Can't Get Group Transformation Pointer" );
         return;
     }
 
@@ -5370,7 +5371,7 @@ double SetParmValUpdate( const string & parm_id, double val )
     Parm* p = ParmMgr.FindParm( parm_id );
     if ( !p )
     {
-        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "SetParmVal::Can't Find Parm " + parm_id );
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "SetParmValUpdate::Can't Find Parm " + parm_id );
         return val;
     }
     ErrorMgr.NoError();
@@ -5386,7 +5387,7 @@ double SetParmValUpdate( const string & geom_id, const string & parm_name, const
     Parm* p = ParmMgr.FindParm( parm_id );
     if ( !p )
     {
-        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "SetParmVal::Can't Find Parm " + parm_id );
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "SetParmValUpdate::Can't Find Parm " + parm_id );
         return val;
     }
     ErrorMgr.NoError();
@@ -5420,26 +5421,26 @@ double GetParmVal( const string & geom_id, const string & name, const string & g
     return p->Get();
 }
 
-/// Get the value of parm
+/// Get the value of an int parm
 int GetIntParmVal( const string & parm_id )
 {
     Parm* p = ParmMgr.FindParm( parm_id );
     if ( !p )
     {
-        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetParmVal::Can't Find Parm " + parm_id );
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetIntParmVal::Can't Find Parm " + parm_id );
         return 0;
     }
     ErrorMgr.NoError();
     return (int)(p->Get()+0.5);
 }
 
-/// Get the value of parm
+/// Get the value of a bool parm
 bool GetBoolParmVal( const string & parm_id )
 {
     Parm* p = ParmMgr.FindParm( parm_id );
     if ( !p )
     {
-        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetParmVal::Can't Find Parm " + parm_id );
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetBoolParmVal::Can't Find Parm " + parm_id );
         return false;
     }
     if ( p->GetType() != PARM_BOOL_TYPE )
@@ -5540,7 +5541,7 @@ string GetParmGroupName( const string & parm_id )
     Parm* p = ParmMgr.FindParm( parm_id );
     if ( !p )
     {
-        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetParmGroup::Can't Find Parm " + parm_id );
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetParmGroupName::Can't Find Parm " + parm_id );
         return string();
     }
     ErrorMgr.NoError();
@@ -5553,7 +5554,7 @@ string GetParmDisplayGroupName( const string & parm_id )
     Parm* p = ParmMgr.FindParm( parm_id );
     if ( !p )
     {
-        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetParmDisplayGroup::Can't Find Parm " + parm_id );
+        ErrorMgr.AddError( VSP_CANT_FIND_PARM, "GetParmDisplayGroupName::Can't Find Parm " + parm_id );
         return string();
     }
     ErrorMgr.NoError();
@@ -5894,8 +5895,8 @@ bool DeleteVarPresetSet( const string &group_name, const string &setting_name )
     }
     else
     {
-        ErrorMgr.AddError( VSP_INVALID_VARPRESET_GROUPNAME, "SwitchSaveParmGroup::Can't Find Group " + group_name );
-        ErrorMgr.AddError( VSP_INVALID_VARPRESET_SETNAME, "SwitchSaveParmGroup::Can't Find Setting " + setting_name );
+        ErrorMgr.AddError( VSP_INVALID_VARPRESET_GROUPNAME, "DeleteVarPresetSet::Can't Find Group " + group_name );
+        ErrorMgr.AddError( VSP_INVALID_VARPRESET_SETNAME, "DeleteVarPresetSet::Can't Find Setting " + setting_name );
         return false;
     }
 }
@@ -5923,7 +5924,7 @@ vector <string> GetVarPresetSettingNamesWName( const string &group_name )
 
     if ( vec.empty() )
     {
-        ErrorMgr.AddError( VSP_INVALID_VARPRESET_GROUPNAME, "SwitchSaveParmGroup::Can't Find Group " + group_name );
+        ErrorMgr.AddError( VSP_INVALID_VARPRESET_GROUPNAME, "GetVarPresetSettingNamesWName::Can't Find Group " + group_name );
         return vec;
     }
     else
@@ -5940,7 +5941,7 @@ vector <string> GetVarPresetSettingNamesWIndex( int group_index )
 
     if ( vec.empty() )
     {
-        ErrorMgr.AddError( VSP_INVALID_VARPRESET_GROUPNAME, "SwitchSaveParmGroup::Can't Find Group @ Index " + to_string( group_index ) );
+        ErrorMgr.AddError( VSP_INVALID_VARPRESET_GROUPNAME, "GetVarPresetSettingNamesWIndex::Can't Find Group @ Index " + to_string( group_index ) );
         return vec;
     }
     else
@@ -6722,19 +6723,19 @@ vector < vec3d > CompVecPnt01( const std::string &geom_id, const int &surf_indx,
             }
             else
             {
-                ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "CompPnt01::Invalid surf index " + to_string( surf_indx ) );
+                ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "CompVecPnt01::Invalid surf index " + to_string( surf_indx ) );
                 return pts;
             }
         }
         else
         {
-            ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "CompPnt01::Input size mismatch." );
+            ErrorMgr.AddError( VSP_INDEX_OUT_RANGE, "CompVecPnt01::Input size mismatch." );
             return pts;
         }
     }
     else
     {
-        ErrorMgr.AddError( VSP_INVALID_GEOM_ID, "CompPnt01::Can't Find Geom " + geom_id );
+        ErrorMgr.AddError( VSP_INVALID_GEOM_ID, "CompVecPnt01::Can't Find Geom " + geom_id );
         return pts;
     }
     ErrorMgr.NoError();
