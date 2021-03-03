@@ -1991,7 +1991,11 @@ string GetGeomTypeName( const string & geom_id )
 string GetParm( const string & geom_id, const string & name, const string & group )
 {
     Vehicle* veh = GetVehicle();
-    LinkMgr.BuildLinkableParmData();        // Make Sure Name/Group Get Mapped To Parms
+    
+    if ( ParmMgr.GetDirtyFlag() )
+    {
+        LinkMgr.BuildLinkableParmData();        // Make Sure Name/Group Get Mapped To Parms
+    }
 
     string parm_id;
 
@@ -5585,6 +5589,11 @@ void SetParmDescript( const string & parm_id, const string & desc )
 ///  Find a parm id given parm container, name and group
 string FindParm( const string & parm_container_id, const string& parm_name, const string& group_name )
 {
+    if ( ParmMgr.GetDirtyFlag() )
+    {
+        LinkMgr.BuildLinkableParmData();        // Make Sure Name/Group Get Mapped To Parms
+    }
+
     ParmContainer* pc = ParmMgr.FindParmContainer( parm_container_id );
 
     if ( !pc )
@@ -5613,7 +5622,10 @@ string FindParm( const string & parm_container_id, const string& parm_name, cons
 vector< std::string > FindContainers()
 {
     vector< string > containerVec;
-    LinkMgr.BuildLinkableParmData();
+    if ( ParmMgr.GetDirtyFlag() )
+    {
+        LinkMgr.BuildLinkableParmData();
+    }
     LinkMgr.GetAllContainerVec( containerVec );
 
     ErrorMgr.NoError();
@@ -5624,7 +5636,10 @@ vector< std::string > FindContainersWithName( const string & name )
 {
     vector< string > containerVec;
     vector< string > ret_vec;
-    LinkMgr.BuildLinkableParmData();
+    if ( ParmMgr.GetDirtyFlag() )
+    {
+        LinkMgr.BuildLinkableParmData();
+    }
     LinkMgr.GetAllContainerVec( containerVec );
 
     for ( int i = 0 ; i < ( int )containerVec.size() ; i++ )
@@ -5644,7 +5659,10 @@ string FindContainer( const string & name, int index )
 {
     vector< string > containerVec;
     vector< string > id_vec;
-    LinkMgr.BuildLinkableParmData();
+    if ( ParmMgr.GetDirtyFlag() )
+    {
+        LinkMgr.BuildLinkableParmData();
+    }
     LinkMgr.GetAllContainerVec( containerVec );
 
     for ( int i = 0 ; i < ( int )containerVec.size() ; i++ )
