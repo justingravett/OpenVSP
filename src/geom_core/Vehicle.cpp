@@ -4653,7 +4653,8 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
             else
             {
                 SetActiveGeom( id );
-                new_geom->Update();
+                new_geom->SetDirtyFlag( GeomBase::SURF );
+                new_geom->Update( true );
             }
         }
     }
@@ -4686,7 +4687,8 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
                 else
                 {
                     SetActiveGeom( id );
-                    prop->Update();
+                    prop->SetDirtyFlag( GeomBase::SURF );
+                    prop->Update( true );
                 }
             }
         }
@@ -4859,7 +4861,8 @@ string Vehicle::ImportFile( const string & file_name, int file_type )
             else
             {
                 SetActiveGeom( id );
-                new_geom->Update();
+                new_geom->SetDirtyFlag( GeomBase::SURF ); // m_TMeshVec has been updated
+                new_geom->Update( true );
             }
         }
     }
