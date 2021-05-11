@@ -134,10 +134,8 @@ void ConformalGeom::UpdateSurf()
         }
         else
         {
-            int skin_type = m_MainSurfVec[i].GetSkinType();
-
             //==== Only Works for Skin Ribs for Now ====//
-            if (skin_type == VspSurf::SKIN_RIBS)
+            if ( m_MainSurfVec[i].GetSkinType() == VspSurf::SKIN_RIBS)
             {
                 //==== Check If Wing ====//
                 if (m_WingParentFlag)
@@ -160,18 +158,13 @@ void ConformalGeom::UpdateSurf()
                     AdjustShape(m_MainSurfVec[i], parent_surf_vec[i], offset);
 //ComputeMaxOffsetError( m_MainSurfVec[i], parent_surf_vec[i], offset, 20, 8 );
                 }
+            }
 
-                //==== Trim U and V is Needed ====//
-                TrimU(m_MainSurfVec[i]);
-                TrimV(m_MainSurfVec[i]);
-            }
-                //==== To Do - Body of Rev (Pods) ====//
-            else if (skin_type == VspSurf::SKIN_BODY_REV)
-            {
-                //==== Trim U and V is Needed ====//
-                TrimU(m_MainSurfVec[i]);
-                TrimV(m_MainSurfVec[i]);
-            }
+            //==== To Do - Body of Rev (Pods) ====//
+
+            //==== Trim U and V is Needed ====//
+            TrimU(m_MainSurfVec[i]);
+            TrimV(m_MainSurfVec[i]);
         }
     }
 

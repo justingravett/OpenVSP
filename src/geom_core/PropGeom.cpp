@@ -2223,3 +2223,79 @@ void PropGeom::GetSurfVec( vector<VspSurf> &surf_vec )
         Geom::GetSurfVec( surf_vec );
     }
 }
+
+// Offset a Prop Conformal Component from this parent Geom
+void PropGeom::OffsetXSecs( double off )
+{
+    if ( m_PropMode() == PROP_DISK )
+    {
+        return;
+    }
+
+    vector < double > new_val_vec( m_ChordCurve.m_ValParmVec.size() ), new_t_vec( m_ChordCurve.m_TParmVec.size() );
+
+    double d_f = ( m_Diameter() - 2 * off ); // final offset diameter
+    double r_f = d_f / 2; // final offset radius
+
+    // Increase limits of m_RadiusFrac sice is a Conformal Component
+    // that does not provide user access to the Parm. This allows the 
+    // previous XSec to temporarily be at a higher radius fraction than
+    // the next XSec. XSec order will be reinforced when UpdateSurf is 
+    // called
+    for ( size_t i = 0; i < m_XSecSurf.NumXSec(); i++ )
+    {
+        PropXSec* xsec = (PropXSec*)m_XSecSurf.FindXSec( i );
+        if ( xsec )
+        {
+            xsec->m_RadiusFrac.SetLowerUpperLimits( 0.0, 1.0 );
+        }
+    }
+
+    PropXSec* xsec_first = (PropXSec*)m_XSecSurf.FindXSec( 0 );
+    double r_first_o = xsec_first->m_RadiusFrac();
+    double r_first_f = ( r_first_o * m_Diameter() + 2 * off ) / d_f;
+    xsec_first->m_RadiusFrac.Set( r_first_f );
+
+    PropXSec* xsec_last = (PropXSec*)m_XSecSurf.FindXSec( m_XSecSurf.NumXSec() - 1 );
+    double r_last_o = xsec_last->m_RadiusFrac();
+    double r_last_f = r_last_o; // Should always be 1
+    xsec_last->m_RadiusFrac.Set( r_last_f );
+
+    // Maintain relative fractions for itermediate XSecs
+    for ( size_t i = 1; i < m_XSecSurf.NumXSec() - 1; i++ )
+    {
+        PropXSec* xsec = (PropXSec*)m_XSecSurf.FindXSec( i );
+        if ( xsec )
+        {
+            xsec->m_RadiusFrac.Set( ( r_last_f - r_first_f ) * ( xsec->m_RadiusFrac() - r_first_o ) / ( r_last_o - r_first_o ) + r_first_f );
+        }
+    }
+
+    double c_first_o = ( m_Diameter() / 2 ) * m_ChordCurve.Comp( r_first_f ); // First XSec chord at offset t parameter
+    double c_first_f = c_first_o - 2 * off; // Final offset chord value at offset t parameter
+
+    double c_last_o = ( m_Diameter() / 2 ) * m_ChordCurve.Comp( r_last_f ); // Last XSec chord
+    double c_last_f = c_last_o - 2 * off; // Final offset chord value at offset t parameter
+
+    new_val_vec.front() = max( 1e-12, ( c_first_f / r_f ) );
+    new_val_vec.back() = max( 1e-12, ( c_last_f / r_f ) );
+    new_t_vec.front() = r_first_f;
+    new_t_vec.back() = r_last_f;
+
+    // Adjust chord distribution by offset (applied on LE and TE)
+    for ( int i = 1; i < m_ChordCurve.m_TParmVec.size() - 1; i++ )
+    {
+        double t_f_i = ( r_last_f - r_first_f ) * ( m_ChordCurve.m_TParmVec[i]->Get() - r_first_o ) / ( r_last_o - r_first_o ) + r_first_f; // Offset t parameter value
+        new_t_vec[i] = t_f_i;
+
+        double c_o_i = ( m_Diameter() / 2 ) * m_ChordCurve.Comp( t_f_i ); // Orignal chord value at offset t parameter
+        double c_f_i = c_o_i - 2 * off; // Fianl offset chord value at offset t parameter
+
+        new_val_vec[i] = max( 1e-12, ( c_f_i / r_f ) );
+    }
+
+    m_ChordCurve.SetCurve( new_t_vec, new_val_vec, m_ChordCurve.m_CurveType.Get(), m_ChordCurve.GetG1Vec() );
+
+    // Offset diameter
+    m_Diameter.Set( d_f );
+}

@@ -155,6 +155,8 @@ public:
 
     virtual void GetSurfVec( vector<VspSurf> &surf_vec );
 
+    virtual void OffsetXSecs( double off );
+
     Parm m_Diameter;
 
     Parm m_Rotate;
