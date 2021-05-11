@@ -112,6 +112,7 @@ XSecCurve::XSecCurve()
     m_XSecImageH.Init( "XSecImageH", ( m_GroupName + "_Background" ), this, 1.0, -1.0e12, 1.0e12 );
     m_XSecImageXOffset.Init( "XSecImageXOffset", ( m_GroupName + "_Background" ), this, 0.0, -1.0e12, 1.0e12 );
     m_XSecImageYOffset.Init( "XSecImageYOffset", ( m_GroupName + "_Background" ), this, 0.0, -1.0e12, 1.0e12 );
+    m_XSecFlipImageFlag.Init( "XSecFlipImageFlag", ( m_GroupName + "_Background" ), this, false, false, true );
 
     m_FakeWidth = 1.0;
     m_UseFakeWidth = false;
@@ -270,6 +271,7 @@ void XSecCurve::CopyBackgroundSettings( XSecCurve* xsc )
     m_XSecImagePreserveAR.Set( xsc->m_XSecImagePreserveAR.Get() );
     m_XSecImageFlag.Set( xsc->m_XSecImageFlag.Get() );
     m_ImageFile = xsc->GetImageFile();
+    m_XSecFlipImageFlag = xsc->m_XSecFlipImageFlag();
 }
 
 //==== Parm Changed ====//
@@ -2447,9 +2449,6 @@ EditCurveXSec::EditCurveXSec() : XSecCurve()
 
     m_XSecPointColorWheel.Init( "XSecPointColorWheel", ( m_GroupName + "_Background" ), this, -1, -1, 359 );
     m_XSecPointColorWheel.SetDescript( "Color wheel index for XS_EDIT_CURVE points" );
-
-    m_DrawFlippedXSecFlag.Init( "DrawFlippedXSecFlag", m_GroupName, this, false, false, true );
-    m_DrawFlippedXSecFlag.SetDescript( "Flag to draw the X location of the control points on the opposite side of the Y axis" );
 
     m_SelectPntID = 0;
     m_EnforceG1Next = true;

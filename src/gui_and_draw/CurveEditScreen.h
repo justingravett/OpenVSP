@@ -84,7 +84,6 @@ private:
     StringOutput m_CurveType;
 
     ToggleButton m_PreserveXSecARToggle;
-    ToggleButton m_FlipXSecToggle;
     ToggleButton m_AbsDimToggle;
 
     // Draw Tab GUI Elements
@@ -107,6 +106,7 @@ private:
     SliderAdjRangeInput m_ImageWScale;
     SliderAdjRangeInput m_ImageHScale;
     ToggleButton m_PreserveImageAspect;
+    ToggleButton m_FlipImageToggle;
 
     SliderAdjRangeInput m_ImageXOffset;
     SliderAdjRangeInput m_ImageYOffset;

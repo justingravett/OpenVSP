@@ -84,17 +84,8 @@ CurveEditScreen::CurveEditScreen( ScreenMgr* mgr ) : TabScreen( mgr, 750, 615, "
 
     m_XSecLayout.AddDividerBox( "Scale XSec" );
 
-    m_XSecLayout.SetFitWidthFlag( false );
-    m_XSecLayout.SetSameLineFlag( true );
-    m_XSecLayout.SetButtonWidth( m_XSecLayout.GetRemainX() / 2 );
-
     m_XSecLayout.AddButton( m_PreserveXSecARToggle, "Preserve Aspect Ratio" );
-    m_XSecLayout.AddButton( m_FlipXSecToggle, "Flip XSec" );
-    m_FlipXSecToggle.GetFlButton()->value( 0 );
 
-    m_XSecLayout.ForceNewLine();
-    m_XSecLayout.SetFitWidthFlag( true );
-    m_XSecLayout.SetSameLineFlag( false );
     m_XSecLayout.InitWidthHeightVals();
     m_XSecLayout.SetButtonWidth( m_XSecLayout.GetRemainX() / 3 );
 
@@ -215,12 +206,12 @@ CurveEditScreen::CurveEditScreen( ScreenMgr* mgr ) : TabScreen( mgr, 750, 615, "
 
     m_BackgroundImageLayout.SetFitWidthFlag( false );
     m_BackgroundImageLayout.SetSameLineFlag( true );
-    m_BackgroundImageLayout.SetButtonWidth( m_BackgroundImageLayout.GetRemainX() / 2 );
+    m_BackgroundImageLayout.SetButtonWidth( ( m_BackgroundImageLayout.GetW() / 3 ) + 20 );
 
     m_BackgroundImageLayout.AddButton( m_PreserveImageAspect, "Preserve Aspect" );
-    m_PreserveImageAspect.GetFlButton()->value( 1 );
+    m_BackgroundImageLayout.SetButtonWidth( ( m_BackgroundImageLayout.GetW() / 3 ) - 10 );
     m_BackgroundImageLayout.AddButton( m_LockImageToggle, "Lock Image" );
-    m_LockImageToggle.GetFlButton()->value( 0 );
+    m_BackgroundImageLayout.AddButton( m_FlipImageToggle, "Flip Image" );
 
     m_BackgroundImageLayout.SetFitWidthFlag( true );
     m_BackgroundImageLayout.SetSameLineFlag( false );
@@ -454,16 +445,6 @@ bool CurveEditScreen::Update()
 
     m_AbsDimToggle.Update( edit_curve_xs->m_AbsoluteFlag.GetID() );
     m_PreserveXSecARToggle.Update( edit_curve_xs->m_PreserveARFlag.GetID() );
-    m_FlipXSecToggle.Update( edit_curve_xs->m_DrawFlippedXSecFlag.GetID() );
-
-    if ( edit_curve_xs->m_DrawFlippedXSecFlag.Get() )
-    {
-        m_XSecGlWin->rotateSphere( DEG2RAD( 180 ), 0, DEG2RAD( 180 ) );
-    }
-    else
-    {
-        m_XSecGlWin->rotateSphere( 0, 0, 0 );
-    }
 
     Geom* geom_ptr = m_ScreenMgr->GetCurrGeom();
 
@@ -657,6 +638,9 @@ bool CurveEditScreen::Update()
 
         m_PreserveImageAspect.Update( edit_curve_xs->m_XSecImagePreserveAR.GetID() );
         m_LockImageToggle.Update( edit_curve_xs->m_XSecLockImageFlag.GetID() );
+
+        m_FlipImageToggle.Update( edit_curve_xs->m_XSecFlipImageFlag.GetID() );
+        viewport->getBackground()->flipX( edit_curve_xs->m_XSecFlipImageFlag.Get() );
 
         if ( edit_curve_xs->m_XSecLockImageFlag() )
         {
